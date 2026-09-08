@@ -315,7 +315,22 @@ export const SKILL_GROUPS: {
 }[] = [
   {
     title: { en: "Cloud & enterprise", sk: "Cloud a podnikové systémy" },
-    items: ["Microsoft Fabric", "Microsoft 365", "Power Platform", "Azure", "Entra ID"],
+    items: [
+      "Microsoft Fabric",
+      "Microsoft 365",
+      "Power Platform",
+      "Azure",
+      "Entra ID",
+      "Google Cloud Certified",
+      "AWS",
+      "IBM Cloud",
+      "Alibaba Cloud",
+      "SAP",
+      "Salesforce",
+      "Kubernetes",
+      "Docker",
+      "Stripe Developer",
+    ],
   },
   {
     title: { en: "Build & community", sk: "Vývoj a komunita" },

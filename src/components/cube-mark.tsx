@@ -6,7 +6,7 @@ type CubeMarkProps = {
   title?: string;
 };
 
-export function CubeMark({ className, animated = false, title = "RMD26 cube" }: CubeMarkProps) {
+export function CubeMark({ className, animated = false, title: _title = "RMD26 cube" }: CubeMarkProps) {
   return (
     <svg
       viewBox="0 0 120 120"
