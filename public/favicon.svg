@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="RMD26">
+  <rect width="32" height="32" rx="7" fill="#07090E"/>
+  <path
+    fill="none"
+    stroke="#8EABC4"
+    stroke-width="1.55"
+    stroke-linejoin="round"
+    stroke-linecap="round"
+    d="M16 5.8 L25.4 11 L16 16.2 L6.6 11 Z
+       M6.6 11 V20.2 L16 25.4
+       M25.4 11 V20.2 L16 25.4
+       M16 16.2 V25.4"/>
+  <circle cx="16" cy="13.9" r="3.7" fill="#10141C" stroke="#8EABC4" stroke-width="1.15"/>
+</svg>

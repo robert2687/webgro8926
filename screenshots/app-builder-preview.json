@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "RMD26 — Róbert Málik",
+      "hasCanvas": false,
+      "bodyTextLen": 4912,
+      "bodyTextHash": "29e67a63f8f476b031827147954ffaac83b7188b68981f783d89227e2a972d5a",
+      "bodyTextPrefix": "RMD26 Work Thesis Experience About Contact EN SK RMD26 · 2026 BL",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "RMD26 — Róbert Málik",
+      "hasCanvas": false,
+      "bodyTextLen": 4875,
+      "bodyTextHash": "017659798ecd3efa01a81344357903441fed1ce1c4e84d036ec01358d4743f2d",
+      "bodyTextPrefix": "RMD26 EN SK RMD26 · 2026 BLUEPRINT Róbert Málik Operations, qual",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}

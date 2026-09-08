@@ -1,0 +1,32 @@
+Položka portfólia: Škálovateľný streamovací dátový pipeline v Databricks (Delta Live Tables)
+Prehľad projektu
+Tento projekt podrobne opisuje škálovateľnú architektúru streamovacích dátových platforiem implementovanú v Databricks, využívajúcu Delta Live Tables (DLT) na spracovanie streamovaných dát cez medailovú architektúru (bronzové, strieborné, zlaté vrstvy). Riešenie je navrhnuté pre robustné, odolné voči chybám a vysoko výkonné spracovanie udalostí v reálnom čase.
+Riešený problém
+Spracovanie streamovaných dát často zahŕňa výzvy, ako je riadenie vývoja schémy, zabezpečenie kvality dát, správa oneskorených dát, optimalizácia úložiska pre malé súbory a dynamické škálovanie zdrojov. Táto architektúra poskytuje štruktúrovaný a automatizovaný prístup na prekonanie týchto zložitostí, premieňajúc surové vložené dáta na čisté, agregované poznatky vhodné pre rôzne následné aplikácie, ako sú dashboardy a ML servis.
+Technická architektúra
+Architektúra sa riadi medailónovou architektúrou, ktorá pozostáva z troch vrstiev:
+• Bronzová vrstva (Raw Ingestion): Táto vrstva zachytáva surové udalosti z rôznych zdrojov (napr. Kafka, S3/ADLS) len na pripojenie, čím zabezpečuje plnú vernosť bez transformácie. Je navrhnutý tak, aby bol odolný voči strate dát a umožňoval efektívne orezávanie v časovom rozsahu.
+• Strieborná vrstva (vyčistené a konformované dáta): Údaje z bronzovej vrstvy sa v tejto fáze čistia, deduplikujú a formujú. Zahŕňa vynucovanie schémy a rieši zlé záznamy buď ich vyhadzovaním, alebo karanténou, čím zabraňuje tichému poškodeniu dát.
+• Zlatá vrstva (agregované a obchodné dáta): Táto posledná vrstva poskytuje agregácie a súhrny na úrovni biznisu, optimalizované na spotrebu dashboardmi, ML servisom alebo inými analytickými nástrojmi. Príkladmi sú denné zhrnutia celej platformy a metriky aktivity používateľov v reálnom čase.
+Kľúčové technológie
+• Databricks: Jednotná analytická platforma, ktorá hostí celý pipeline.
+• Delta Live Tables (DLT): Automatizovaný rámec postavený na Databricks na tvorbu spoľahlivých, udržiavateľných a testovateľných dátových pipeline. DLT automaticky spracováva kontrolné body, opakovania a líniu dát.
+• Apache Kafka Connector: Používa sa na prijímanie streamovaných udalostí v reálnom čase.
+• Auto Loader: Funkcia Databricks na efektívne prijímanie nových dátových súborov hneď po ich príchode do cloudového úložiska (napr. S3, ADLS).
+• PySpark SQL: Základný jazyk pre transformácie a agregácie dát v rámci pipeline.
+• Unity katalóg: Využívaný na správu dát a obsluhu zlatej vrstvy.
+Kľúčové vlastnosti a dizajnové rozhodnutia
+Architektúra zahŕňa niekoľko kľúčových návrhových rozhodnutí pre škálovateľnosť, spoľahlivosť a udržiavateľnosť:
+• Stratégia prijímania: Hybridný prístup využívajúci Auto Loader pre zdroje založené na súboroch (spracovanie evolúcie schémy a spracovanie presne raz) a Kafka konektor pre prijímanie streamov v reálnom čase.
+• Spracovateľský rámec: Využíva Delta Live Tables namiesto surového štruktúrovaného streamovania. Táto voľba zjednodušuje správu pipeline tým, že automaticky spracováva kontrolné body, opakovania, kontroly kvality dát a pôvod.
+• Deduplikácia: Využíva dropDuplicatesWithinWatermark na efektívne zabezpečenie jedinečnosti záznamov v definovaných časových oknách, čím zabraňuje problémom s pamäťou pri plnom historickom sledovaní.
+• Vymáhanie kvality dát: Integruje pravidlá @dlt.expect_or_drop a expect_or_quarantine. To zabezpečuje, že chybné záznamy sú buď odstránené, alebo izolované na ďalšie vyšetrovanie, čím sa zachováva integrita dátových aktív.
+• Kompaktácia súborov: Používa vlastnosti tabuliek autoOptimize.optimizeWrite a delta.autoOptimize.autoCompact na zabránenie "problému malých súborov" bežného pri vysokofrekvenčných streamovacích zápisoch, čím zlepšuje výkon dotazov.
+• Kontrola spätného tlaku: maxOffsetsPerTrigger je nastavený tak, aby obmedzil počet spracovaných záznamov na mikrodávku. Tento mechanizmus zabraňuje chybám Out-Of-Memory (OOM) počas dopravných špičk, čím zabezpečuje stabilnú prevádzku pipeline.
+• Neskoré spracovanie dát: Implementuje vodoznaky (napr. 1 hodina pre striebro, 2 hodiny pre zlato) na plynulé spracovanie oneskorených dát v rámci definovanej tolerancie, pričom nakoniec vyhadzuje extrémne oneskorené dáta na zachovanie výkonu a čerstvosti.
+• Stratégia rozdelenia: Dáta sú rozdelené podľa dátumu v bronzovej vrstve pre efektívne orezávanie časového rozsahu a podľa okien v zlatej vrstve, aby sa zladili s bežnými vzormi dotazov.
+• Dynamické škálovanie: Využíva Databricks Auto Scaling klastrov na prispôsobenie výpočtových zdrojov podľa požiadaviek pracovnej záťaže, škálovanie počas špičkového príjmu a znižovanie počas tichších období pre efektívnosť nákladov.
+Príklad štruktúry kódu
+Poskytnutý príklad obsahuje Python kód pre dlt_pipeline.py súbor, ktorý ukazuje, ako definovať tabuľky Bronze, Silver a Gold pomocou @dlt.table dekorátorov a SQL funkcií PySpark. Tiež ukazuje, ako externalizovať konfigurácie pre zdroje ako Kafka.
+Výsledok a dopad
+Táto architektúra streamovania založená na DLT poskytuje pevný základ pre moderné dátové platformy. Automatizuje veľkú časť prevádzkových režijných nákladov spojených so streamovanou analytikou, zabezpečuje vysokú kvalitu dát a poskytuje včasné, spoľahlivé dáta na riadenie obchodných rozhodnutí a poháňanie AI/ML aplikácií. Modulárny a vrstvený prístup zvyšuje udržateľnosť a zjednodušuje budúce rozšírenia.
